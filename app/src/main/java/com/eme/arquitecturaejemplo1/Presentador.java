@@ -55,16 +55,14 @@ public class Presentador implements RequestInterfaceApi, IPresentador {
                         mostrador.mostrarValor(indicadorEconomico.getSerie().get(0)
                                 .getValor() +
                                 " " + indicadorEconomico.getUnidad_medida());
-                        //resultadoIndicadores.setText(indicadorEconomico.getSerie().get(0).getValor()+
-                          //      " " + indicadorEconomico.getUnidad_medida());
                     } else {
                         Toast.makeText(context, "El api no tiene resultados para esta fecha o tipo de moneda",
                                 Toast.LENGTH_SHORT).show();
-                        //resultadoIndicadores.setText("");
+                        mostrador.limpiarValores();
                     }
                 } else {
                     Toast.makeText(context, "El api no tiene resultados", Toast.LENGTH_SHORT).show();
-                    //resultadoIndicadores.setText("");
+                    mostrador.limpiarValores();
                 }
             }catch (Exception e){
                 Log.e(TAG, "Error: "+e);

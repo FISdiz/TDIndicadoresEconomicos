@@ -41,4 +41,15 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
     public void mostrarValor(String valor) {
             resultadoIndicadores.setText(valor);
     }
+
+    @Override
+    public void limpiarValores() {
+        resultadoIndicadores.setText("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presentador = null;
+    }
 }

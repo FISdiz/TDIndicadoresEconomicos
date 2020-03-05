@@ -17,8 +17,7 @@ import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class MainActivity extends AppCompatActivity implements
-        RequestInterfaceApi {
+public class MainActivity extends AppCompatActivity implements MostradorDeValores {
 
     private static String TAG = "MainActivity";
     private TextView resultadoIndicadores;
@@ -41,59 +40,15 @@ public class MainActivity extends AppCompatActivity implements
     public void consultarIndicador(View v){
         try {
             new IndicadorEconomicoHandler(tipoIndicador.getText().toString(),
-                    fechaIndicador.getText().toString()).getIndicadorEconomico(this);
+                    fechaIndicador.getText().toString())
+                    .getIndicadorEconomico(new Consumidor(getApplicationContext(), this));
         }catch (Exception e){
             Log.e(TAG, "Error: ", e);
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void response(Response response) {
-        try {
-            if (response.state == Response.ResponseState.SUCCESS &&
-                    !response.hasError) {
-                exito(response);
-            } else {
-                String errorMsg = response.hasError ? response.errorMessage :
-                        "No connection error";
-                Toast.makeText(getApplicationContext(), errorMsg,
-                        Toast.LENGTH_SHORT).show();
-                Log.e(TAG, errorMsg);
-            }
-        } catch (Exception objException) {
-            Log.e(TAG, objException.getMessage());
-            Log.d(TAG, "Response: Exception");
-        }
-
-
-    }
-
-    private void exito(Response response){
-        if (response.requestType ==
-                Response.RequestType.SEARCH_FOR_INDICADOR) {
-            try {
-                Gson gson = new GsonBuilder().create();
-                String jsonObject = gson.toJson(response.result);
-                IndicadorEconomico indicadorEconomico = new
-                        Gson().fromJson(jsonObject, IndicadorEconomico.class);
-                if (indicadorEconomico.getSerie() != null) {
-                    if (indicadorEconomico.getSerie().size() > 0) {
-
-                        resultadoIndicadores.setText(indicadorEconomico.getSerie().get(0).getValor()+
-                                " " + indicadorEconomico.getUnidad_medida());
-                    } else {
-                        Toast.makeText(getApplicationContext(), "El api no tiene resultados para esta fecha o tipo de moneda",
-                                Toast.LENGTH_SHORT).show();
-                        resultadoIndicadores.setText("");
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "El api no tiene resultados", Toast.LENGTH_SHORT).show();
-                    resultadoIndicadores.setText("");
-                }
-            }catch (Exception e){
-                Log.e(TAG, "Error: "+e);
-            }
-        }
+    public void mostrarValor(String valor) {
+            resultadoIndicadores.setText(valor);
     }
 }

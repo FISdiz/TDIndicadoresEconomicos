@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.eme.arquitecturaejemplo1.api.RequestInterfaceApi;
 import com.eme.arquitecturaejemplo1.api.Response;
 import com.eme.arquitecturaejemplo1.model.IndicadorEconomico;
+import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -48,35 +49,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void Response(Response response) {
+    public void response(Response response) {
         try {
             if (response.state == Response.ResponseState.SUCCESS &&
                     !response.hasError) {
-                if (response.requestType ==
-                        Response.RequestType.SEARCH_FOR_INDICADOR) {
-                    try {
-                        Gson gson = new GsonBuilder().create();
-                        String jsonObject = gson.toJson(response.result);
-                        IndicadorEconomico indicadorEconomico = new
-                                Gson().fromJson(jsonObject, IndicadorEconomico.class);
-                        if (indicadorEconomico.getSerie() != null) {
-                            if (indicadorEconomico.getSerie().size() > 0) {
-
-                                resultadoIndicadores.setText(indicadorEconomico.getSerie().get(0).getValor()+
-                                        " " + indicadorEconomico.getUnidad_medida());
-                            } else {
-                                Toast.makeText(getApplicationContext(), "El api no tiene resultados para esta fecha o tipo de moneda",
-                                        Toast.LENGTH_SHORT).show();
-                                resultadoIndicadores.setText("");
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "El api no tiene resultados", Toast.LENGTH_SHORT).show();
-                                    resultadoIndicadores.setText("");
-                        }
-                    }catch (Exception e){
-                        Log.e(TAG, "Error: "+e);
-                    }
-                }
+                exito(response);
             } else {
                 String errorMsg = response.hasError ? response.errorMessage :
                         "No connection error";
@@ -87,6 +64,36 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Exception objException) {
             Log.e(TAG, objException.getMessage());
             Log.d(TAG, "Response: Exception");
+        }
+
+
+    }
+
+    private void exito(Response response){
+        if (response.requestType ==
+                Response.RequestType.SEARCH_FOR_INDICADOR) {
+            try {
+                Gson gson = new GsonBuilder().create();
+                String jsonObject = gson.toJson(response.result);
+                IndicadorEconomico indicadorEconomico = new
+                        Gson().fromJson(jsonObject, IndicadorEconomico.class);
+                if (indicadorEconomico.getSerie() != null) {
+                    if (indicadorEconomico.getSerie().size() > 0) {
+
+                        resultadoIndicadores.setText(indicadorEconomico.getSerie().get(0).getValor()+
+                                " " + indicadorEconomico.getUnidad_medida());
+                    } else {
+                        Toast.makeText(getApplicationContext(), "El api no tiene resultados para esta fecha o tipo de moneda",
+                                Toast.LENGTH_SHORT).show();
+                        resultadoIndicadores.setText("");
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "El api no tiene resultados", Toast.LENGTH_SHORT).show();
+                    resultadoIndicadores.setText("");
+                }
+            }catch (Exception e){
+                Log.e(TAG, "Error: "+e);
+            }
         }
     }
 }

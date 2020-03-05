@@ -1,5 +1,6 @@
-package com.eme.arquitecturaejemplo1;
+package com.eme.arquitecturaejemplo1.util;
 
+import com.eme.arquitecturaejemplo1.api.RetrofitClient;
 import com.eme.arquitecturaejemplo1.api.CallHandle;
 import com.eme.arquitecturaejemplo1.api.IndicadorEconomicoApi;
 import com.eme.arquitecturaejemplo1.api.RequestInterfaceApi;

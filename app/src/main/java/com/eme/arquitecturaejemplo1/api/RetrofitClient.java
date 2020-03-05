@@ -1,4 +1,4 @@
-package com.eme.arquitecturaejemplo1;
+package com.eme.arquitecturaejemplo1.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

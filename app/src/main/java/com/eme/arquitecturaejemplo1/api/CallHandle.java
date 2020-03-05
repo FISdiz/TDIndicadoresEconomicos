@@ -30,10 +30,10 @@ public class CallHandle {
                         assert response.errorBody() != null;
                         objResponse.errorMessage = response.message();
                     }
-                    objRestRequestInterface.Response(objResponse);
+                    objRestRequestInterface.response(objResponse);
                 } catch (Exception objException) {
                     objResponse.errorMessage = "Error2 en la respuesta";
-                    objRestRequestInterface.Response(objResponse);
+                    objRestRequestInterface.response(objResponse);
                 }
             }
             @Override
@@ -45,7 +45,7 @@ public class CallHandle {
                     errorMessage = "4Server error";
                 }
                 objResponse.errorMessage = errorMessage;
-                objRestRequestInterface.Response(objResponse);
+                objRestRequestInterface.response(objResponse);
             }
         });
     }

@@ -7,16 +7,17 @@ import android.widget.Toast;
 import com.eme.arquitecturaejemplo1.api.RequestInterfaceApi;
 import com.eme.arquitecturaejemplo1.api.Response;
 import com.eme.arquitecturaejemplo1.model.IndicadorEconomico;
+import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class Consumidor implements RequestInterfaceApi {
+public class Presentador implements RequestInterfaceApi, IPresentador {
 
     private static final String TAG = "Consumidor";
     private Context context;
     private MostradorDeValores mostrador;
 
-    public Consumidor(Context context, MostradorDeValores mostrador) {
+    public Presentador(Context context, MostradorDeValores mostrador) {
         this.context = context;
         this.mostrador = mostrador;
     }
@@ -68,6 +69,16 @@ public class Consumidor implements RequestInterfaceApi {
             }catch (Exception e){
                 Log.e(TAG, "Error: "+e);
             }
+        }
+    }
+
+    public void consultarIndicador(String indicador, String fecha){
+        try {
+            new IndicadorEconomicoHandler(indicador,
+                    fecha)
+                    .getIndicadorEconomico(this);
+        }catch (Exception e){
+            Log.e(TAG, "Error: ", e);
         }
     }
 }

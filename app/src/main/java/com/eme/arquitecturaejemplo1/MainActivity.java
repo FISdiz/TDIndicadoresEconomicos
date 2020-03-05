@@ -2,26 +2,20 @@ package com.eme.arquitecturaejemplo1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.eme.arquitecturaejemplo1.api.RequestInterfaceApi;
-import com.eme.arquitecturaejemplo1.api.Response;
-import com.eme.arquitecturaejemplo1.model.IndicadorEconomico;
 import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class MainActivity extends AppCompatActivity implements MostradorDeValores {
 
     private static String TAG = "MainActivity";
     private TextView resultadoIndicadores;
     private EditText tipoIndicador, fechaIndicador;
+    IPresentador presentador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
         setContentView(R.layout.activity_main);
 
         initializeViews();
+        presentador = new Presentador(getApplicationContext(), this);
     }
 
     private void initializeViews(){
@@ -38,13 +33,8 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
     }
 
     public void consultarIndicador(View v){
-        try {
-            new IndicadorEconomicoHandler(tipoIndicador.getText().toString(),
-                    fechaIndicador.getText().toString())
-                    .getIndicadorEconomico(new Consumidor(getApplicationContext(), this));
-        }catch (Exception e){
-            Log.e(TAG, "Error: ", e);
-        }
+        presentador.consultarIndicador(tipoIndicador.getText().toString(),
+                fechaIndicador.getText().toString());
     }
 
     @Override

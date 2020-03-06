@@ -4,14 +4,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eme.arquitecturaejemplo1.presenter.IPresentador;
 import com.eme.arquitecturaejemplo1.presenter.Presentador;
+import com.eme.arquitecturaejemplo1.view.Messenger;
 import com.eme.arquitecturaejemplo1.view.MostradorDeValores;
 
-public class MainActivity extends AppCompatActivity implements MostradorDeValores {
+public class MainActivity extends AppCompatActivity implements MostradorDeValores, Messenger {
 
     private static String TAG = "MainActivity";
     private TextView resultadoIndicadores;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
         setContentView(R.layout.activity_main);
 
         initializeViews();
-        presentador = new Presentador(getApplicationContext(), this);
+        presentador = new Presentador(this, this);
     }
 
     private void initializeViews() {
@@ -52,5 +54,10 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
     protected void onDestroy() {
         super.onDestroy();
         presentador = null;
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

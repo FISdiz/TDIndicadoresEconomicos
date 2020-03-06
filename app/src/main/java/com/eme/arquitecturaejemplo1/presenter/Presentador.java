@@ -1,25 +1,25 @@
 package com.eme.arquitecturaejemplo1.presenter;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.eme.arquitecturaejemplo1.api.RequestInterfaceApi;
 import com.eme.arquitecturaejemplo1.api.Response;
 import com.eme.arquitecturaejemplo1.model.IndicadorEconomico;
 import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
+import com.eme.arquitecturaejemplo1.view.Messenger;
 import com.eme.arquitecturaejemplo1.view.MostradorDeValores;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Presentador implements RequestInterfaceApi, IPresentador {
 
-    private static final String TAG = "Consumidor";
-    private Context context;
-    private MostradorDeValores mostrador;
+    private static final String TAG = "Presentador";
 
-    public Presentador(Context context, MostradorDeValores mostrador) {
-        this.context = context;
+    private MostradorDeValores mostrador;
+    private Messenger messenger;
+
+    public Presentador(MostradorDeValores mostrador, Messenger messenger) {
+        this.messenger = messenger;
         this.mostrador = mostrador;
     }
 
@@ -32,8 +32,7 @@ public class Presentador implements RequestInterfaceApi, IPresentador {
             } else {
                 String errorMsg = response.hasError ? response.errorMessage :
                         "No connection error";
-                Toast.makeText(context, errorMsg,
-                        Toast.LENGTH_SHORT).show();
+                messenger.showMessage(errorMsg);
                 Log.e(TAG, errorMsg);
             }
         } catch (Exception objException) {
@@ -56,13 +55,13 @@ public class Presentador implements RequestInterfaceApi, IPresentador {
                         mostrador.mostrarValor(indicadorEconomico.getSerie().get(0)
                                 .getValor() +
                                 " " + indicadorEconomico.getUnidad_medida());
+                        messenger.showMessage("exito");
                     } else {
-                        Toast.makeText(context, "El api no tiene resultados para esta fecha o tipo de moneda",
-                                Toast.LENGTH_SHORT).show();
+                        messenger.showMessage("El api no tiene resultados para esta fecha o tipo de moneda");
                         mostrador.limpiarValores();
                     }
                 } else {
-                    Toast.makeText(context, "El api no tiene resultados", Toast.LENGTH_SHORT).show();
+                    messenger.showMessage("El api no tiene resultados");
                     mostrador.limpiarValores();
                 }
             }catch (Exception e){

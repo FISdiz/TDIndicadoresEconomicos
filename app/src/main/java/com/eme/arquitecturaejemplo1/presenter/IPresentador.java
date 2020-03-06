@@ -1,4 +1,4 @@
-package com.eme.arquitecturaejemplo1;
+package com.eme.arquitecturaejemplo1.presenter;
 
 public interface IPresentador {
 

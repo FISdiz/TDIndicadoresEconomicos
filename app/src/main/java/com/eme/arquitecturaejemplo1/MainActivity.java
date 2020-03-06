@@ -1,14 +1,15 @@
 package com.eme.arquitecturaejemplo1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.eme.arquitecturaejemplo1.util.IndicadorEconomicoHandler;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.eme.arquitecturaejemplo1.presenter.IPresentador;
+import com.eme.arquitecturaejemplo1.presenter.Presentador;
+import com.eme.arquitecturaejemplo1.view.MostradorDeValores;
 
 public class MainActivity extends AppCompatActivity implements MostradorDeValores {
 
@@ -26,20 +27,20 @@ public class MainActivity extends AppCompatActivity implements MostradorDeValore
         presentador = new Presentador(getApplicationContext(), this);
     }
 
-    private void initializeViews(){
+    private void initializeViews() {
         resultadoIndicadores = findViewById(R.id.resultado);
         tipoIndicador = findViewById(R.id.idTipo);
         fechaIndicador = findViewById(R.id.idFecha);
     }
 
-    public void consultarIndicador(View v){
+    public void consultarIndicador(View v) {
         presentador.consultarIndicador(tipoIndicador.getText().toString(),
                 fechaIndicador.getText().toString());
     }
 
     @Override
     public void mostrarValor(String valor) {
-            resultadoIndicadores.setText(valor);
+        resultadoIndicadores.setText(valor);
     }
 
     @Override

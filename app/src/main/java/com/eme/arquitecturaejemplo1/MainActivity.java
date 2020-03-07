@@ -1,5 +1,6 @@
 package com.eme.arquitecturaejemplo1;
 
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -7,7 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
+import com.eme.arquitecturaejemplo1.databinding.ActivityMainBinding;
 import com.eme.arquitecturaejemplo1.presenter.IPresentador;
 import com.eme.arquitecturaejemplo1.presenter.Presentador;
 import com.eme.arquitecturaejemplo1.view.Messenger;
@@ -16,38 +20,33 @@ import com.eme.arquitecturaejemplo1.view.MostradorDeValores;
 public class MainActivity extends AppCompatActivity implements MostradorDeValores, Messenger {
 
     private static String TAG = "MainActivity";
-    private TextView resultadoIndicadores;
-    private EditText tipoIndicador, fechaIndicador;
+    ActivityMainBinding binding;
     IPresentador presentador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        initializeViews();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         presentador = new Presentador(this, this);
     }
 
-    private void initializeViews() {
-        resultadoIndicadores = findViewById(R.id.resultado);
-        tipoIndicador = findViewById(R.id.idTipo);
-        fechaIndicador = findViewById(R.id.idFecha);
-    }
-
     public void consultarIndicador(View v) {
-        presentador.consultarIndicador(tipoIndicador.getText().toString(),
-                fechaIndicador.getText().toString());
+        presentador.consultarIndicador(this.binding.idTipo.getText().toString(), this.binding.idFecha.getText().toString());
     }
 
+    /**
+     * Despliega el valor del indicador económico
+     *
+     * @param valor del indicador para una fecha en particular
+     */
     @Override
     public void mostrarValor(String valor) {
-        resultadoIndicadores.setText(valor);
+        binding.setValor(valor);
     }
 
     @Override
     public void limpiarValores() {
-        resultadoIndicadores.setText("");
+        binding.setValor("");
     }
 
     @Override
